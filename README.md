@@ -1,0 +1,1 @@
+# Ulauncher nix package search

@@ -1,0 +1,18 @@
+{
+  "required_api_version": "2.0.0",
+  "name": "Nix integration",
+  "description": "Nix integration",
+  "developer_name": "Daste745",
+  "icon": "images/icon.png",
+  "options": {
+    "query_debounce": 0.5
+  },
+  "preferences": [
+    {
+      "id": "lookup",
+      "type": "keyword",
+      "name": "Lookup packages",
+      "default_value": "nix"
+    }
+  ]
+}
