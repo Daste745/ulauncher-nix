@@ -18,6 +18,7 @@ class Preferences(TypedDict):
     run: str
     channel: str
     max_results: str
+    run_feedback: str
 
 
 class NixExtension(Extension):
@@ -92,7 +93,8 @@ class KeywordQueryEventListener(EventListener):
                         name=program,
                         description=f"{pkg.name} ({pkg.version})",
                         on_enter=ExtensionCustomAction(
-                            {"package": pkg.name, "executable": program}
+                            {"package": pkg.name, "executable": program},
+                            keep_app_open=prefs["run_feedback"] == "yes",
                         ),
                     )
                 )
@@ -108,13 +110,30 @@ class ItemEnterEventListener(EventListener):
         self,
         event: ItemEnterEvent,
         extension: NixExtension,
-    ) -> HideWindowAction:
+    ) -> RenderResultListAction | HideWindowAction:
         data = event.get_data()
+        package = data["package"]
+        executable = data["executable"]
+
+        command = ["nix", "shell", f"nixpkgs#{package}", "-c", executable]
         subprocess.Popen(
-            ["nix", "shell", f"nixpkgs#{data['package']}", "-c", data["executable"]],
+            command,
             start_new_session=True,
         )
-        return HideWindowAction()
+
+        if extension.preferences["run_feedback"] == "no":
+            return HideWindowAction()
+
+        return RenderResultListAction(
+            [
+                ExtensionResultItem(
+                    icon="images/icon.png",
+                    name=f"Starting {executable}...",
+                    description=" ".join(command),
+                    on_enter=HideWindowAction(),
+                )
+            ]
+        )
 
 
 if __name__ == "__main__":

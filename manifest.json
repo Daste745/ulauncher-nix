@@ -32,6 +32,14 @@
       "type": "input",
       "name": "Max results",
       "default_value": "8"
+    },
+    {
+      "id": "run_feedback",
+      "type": "select",
+      "name": "Show feedback after running",
+      "description": "Keep Ulauncher open after running a package to show what command was started",
+      "default_value": "yes",
+      "options": ["yes", "no"]
     }
   ]
 }
