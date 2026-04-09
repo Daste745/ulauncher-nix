@@ -2,7 +2,7 @@ from typing import TypedDict
 
 from ulauncher.api.client.EventListener import EventListener
 from ulauncher.api.client.Extension import Extension
-from ulauncher.api.shared.action.HideWindowAction import HideWindowAction
+from ulauncher.api.shared.action.OpenUrlAction import OpenUrlAction
 from ulauncher.api.shared.action.RenderResultListAction import RenderResultListAction
 from ulauncher.api.shared.event import KeywordQueryEvent
 from ulauncher.api.shared.item.ExtensionResultItem import ExtensionResultItem
@@ -35,14 +35,15 @@ class KeywordQueryEventListener(EventListener):
             return RenderResultListAction([])
 
         prefs = extension.preferences
+        channel = prefs["channel"]
         max_results = int(prefs["max_results"])
-        packages = nixpkgs.search(query, channel=prefs["channel"], max_results=max_results)
+        packages = nixpkgs.search(query, channel=channel, max_results=max_results)
         items = [
             ExtensionResultItem(
                 icon="images/icon.png",
                 name=f"{pkg.name} ({pkg.version})",
                 description=pkg.description,
-                on_enter=HideWindowAction(),
+                on_enter=OpenUrlAction(nixpkgs.package_url(pkg.name, query, channel)),
             )
             for pkg in packages
         ]

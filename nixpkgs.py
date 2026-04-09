@@ -2,6 +2,7 @@ import json
 import urllib.request
 from dataclasses import dataclass
 from urllib.error import URLError
+from urllib.parse import urlencode
 
 SEARCH_URL = "https://search.nixos.org/backend/latest-44-nixos-{}/_search"
 # Public read-only credential from the search.nixos.org frontend
@@ -66,3 +67,8 @@ def search(
         )
 
     return packages
+
+
+def package_url(package_name: str, query: str, channel: str = "unstable") -> str:
+    params = {"channel": channel, "query": query, "show": package_name}
+    return "https://search.nixos.org/packages?" + urlencode(params)
