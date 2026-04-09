@@ -1,6 +1,6 @@
 import json
 import urllib.request
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from urllib.error import URLError
 from urllib.parse import urlencode
 
@@ -14,6 +14,8 @@ class Package:
     name: str
     version: str
     description: str
+    programs: list[str] = field(default_factory=list)
+    main_program: str | None = None
 
 
 def search(
@@ -63,6 +65,8 @@ def search(
                 name=src.get("package_attr_name", ""),
                 version=src.get("package_pversion", ""),
                 description=src.get("package_description") or "",
+                programs=src.get("package_programs") or [],
+                main_program=src.get("package_mainProgram"),
             )
         )
 

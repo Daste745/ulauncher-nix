@@ -15,15 +15,17 @@
       "default_value": "nix"
     },
     {
+      "id": "run",
+      "type": "keyword",
+      "name": "Run nix package",
+      "default_value": ","
+    },
+    {
       "id": "channel",
       "type": "select",
       "name": "Nixpkgs channel",
       "default_value": "unstable",
-      "options": [
-        "unstable",
-        "25.05",
-        "25.11"
-      ]
+      "options": ["unstable", "25.05", "25.11"]
     },
     {
       "id": "max_results",
