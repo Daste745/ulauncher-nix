@@ -13,6 +13,23 @@
       "type": "keyword",
       "name": "Lookup packages",
       "default_value": "nix"
+    },
+    {
+      "id": "channel",
+      "type": "select",
+      "name": "Nixpkgs channel",
+      "default_value": "unstable",
+      "options": [
+        "unstable",
+        "25.05",
+        "25.11"
+      ]
+    },
+    {
+      "id": "max_results",
+      "type": "input",
+      "name": "Max results",
+      "default_value": "8"
     }
   ]
 }
