@@ -6,11 +6,15 @@ Useful actions for working with Nix(OS) system or environments. Lets you search 
 
 ### Look up packages
 
+![Example screenshot of the lookup action](./assets/lookup.png)
+
 By default bound to the `nix` prefix.
 
 Search for packages like you would on [search.nixos.org](https://search.nixos.org/packages). Selecting a package with Enter opens it in the browser.
 
 ### Look up and run packages
+
+![Example screenshot of the run action](./assets/run.png)
 
 By default bound to the `,` prefix.
 
