@@ -76,3 +76,7 @@ def search(
 def package_url(package_name: str, query: str, channel: str = "unstable") -> str:
     params = {"channel": channel, "query": query, "show": package_name}
     return "https://search.nixos.org/packages?" + urlencode(params)
+
+
+def package_attribute(name: str, pkgs_attrset: str = "pkgs") -> str:
+    return f"{pkgs_attrset}.{name}"

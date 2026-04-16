@@ -3,6 +3,7 @@ from typing import TypedDict
 
 from ulauncher.api.client.EventListener import EventListener
 from ulauncher.api.client.Extension import Extension
+from ulauncher.api.shared.action.CopyToClipboardAction import CopyToClipboardAction
 from ulauncher.api.shared.action.ExtensionCustomAction import ExtensionCustomAction
 from ulauncher.api.shared.action.HideWindowAction import HideWindowAction
 from ulauncher.api.shared.action.OpenUrlAction import OpenUrlAction
@@ -63,6 +64,7 @@ class KeywordQueryEventListener(EventListener):
                 name=format_pkg_name(pkg),
                 description=pkg.description,
                 on_enter=OpenUrlAction(nixpkgs.package_url(pkg.name, query, channel)),
+                on_alt_enter=CopyToClipboardAction(nixpkgs.package_attribute(pkg.name)),
             )
             for pkg in packages
         ]
