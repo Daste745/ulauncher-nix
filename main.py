@@ -60,7 +60,7 @@ class KeywordQueryEventListener(EventListener):
         items = [
             ExtensionResultItem(
                 icon="images/icon.png",
-                name=f"{pkg.name} ({pkg.version})",
+                name=format_pkg_name(pkg),
                 description=pkg.description,
                 on_enter=OpenUrlAction(nixpkgs.package_url(pkg.name, query, channel)),
             )
@@ -91,7 +91,7 @@ class KeywordQueryEventListener(EventListener):
                     ExtensionResultItem(
                         icon="images/icon.png",
                         name=program,
-                        description=f"{pkg.name} ({pkg.version})",
+                        description=format_pkg_name(pkg),
                         on_enter=ExtensionCustomAction(
                             {"package": pkg.name, "executable": program},
                             keep_app_open=prefs["run_feedback"] == "yes",
@@ -103,6 +103,10 @@ class KeywordQueryEventListener(EventListener):
             if len(items) >= max_results:
                 break
         return RenderResultListAction(items)
+
+
+def format_pkg_name(pkg: nixpkgs.Package) -> str:
+    return f"{pkg.name} ({pkg.version})" if pkg.version else pkg.name
 
 
 class ItemEnterEventListener(EventListener):
