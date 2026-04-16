@@ -33,6 +33,7 @@ def search(
                     "fields": [
                         "package_pname^3",
                         "package_attr_name^2",
+                        "package_programs^2",
                         "package_description",
                     ],
                     "type": "best_fields",
