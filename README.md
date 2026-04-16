@@ -10,7 +10,7 @@ Useful actions for working with Nix(OS) system or environments. Lets you search 
 
 By default bound to the `nix` prefix.
 
-Search for packages like you would on [search.nixos.org](https://search.nixos.org/packages). Selecting a package with Enter opens it in the browser.
+Search for packages like you would on [search.nixos.org](https://search.nixos.org/packages). Selecting a package with Enter opens it in the browser. Alt-Enter copies `pkgs.packageName` to the clipboard.
 
 ### Look up and run packages
 
