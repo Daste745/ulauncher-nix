@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from urllib.error import URLError
 from urllib.parse import urlencode
 
-SEARCH_URL = "https://search.nixos.org/backend/latest-44-nixos-{}/_search"
+SEARCH_URL = "https://search.nixos.org/backend/nixos-{}/_search"
 # Public read-only credential from the search.nixos.org frontend
 SEARCH_AUTH = "Basic YVdWU0FMWHBadjpYOGdQSG56TDUyd0ZFZWt1eHNmUTljU2g="
 
@@ -47,7 +47,7 @@ def search(
         data=body,
         headers={
             "Content-Type": "application/json",
-            "User-Agent": "ulauncher-nix",
+            "User-Agent": "Ulauncher-Nix-Extension/1.0 (github.com/daste745/ulauncher-nix)",
             "Authorization": SEARCH_AUTH,
         },
     )
