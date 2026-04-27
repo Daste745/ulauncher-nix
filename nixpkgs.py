@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from urllib.error import URLError
 from urllib.parse import urlencode
 
-SEARCH_URL = "https://search.nixos.org/backend/nixos-{}/_search"
+SEARCH_URL = "https://search.nixos.org/backend/latest-44-nixos-{}/_search"
 # Public read-only credential from the search.nixos.org frontend
 SEARCH_AUTH = "Basic YVdWU0FMWHBadjpYOGdQSG56TDUyd0ZFZWt1eHNmUTljU2g="
 
@@ -42,8 +42,12 @@ def search(
         }
     ).encode()
 
+    url = SEARCH_URL.format(channel)
+    print(f"[DEBUG] Request URL: {url}")
+    print(f"[DEBUG] Channel: {channel}")
+
     req = urllib.request.Request(
-        SEARCH_URL.format(channel),
+        url,
         data=body,
         headers={
             "Content-Type": "application/json",
