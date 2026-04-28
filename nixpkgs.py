@@ -4,13 +4,21 @@ from dataclasses import dataclass, field
 from urllib.error import URLError
 from urllib.parse import urlencode
 
-SEARCH_URL = "https://search.nixos.org/backend/latest-44-nixos-{}/_search"
+# Use a wildcard for the index version to avoid needing to update it manually
+# every time there's a new index.
+# This means we'll get results from multiple indexes, which then have to be deduplicated.
+# A single package can have multiple versions (and outputs) from different indexes.
+#
+# This approach is inspired by nix-search-cli's handling of search.nixos.org indexes.
+# See: https://github.com/peterldowns/nix-search-cli/blob/main/pkg/nixsearch/esclient.go#L21
+SEARCH_URL = "https://search.nixos.org/backend/latest-*-nixos-{}/_search"
 # Public read-only credential from the search.nixos.org frontend
 SEARCH_AUTH = "Basic YVdWU0FMWHBadjpYOGdQSG56TDUyd0ZFZWt1eHNmUTljU2g="
 
 
 @dataclass
 class Package:
+    index: str
     name: str
     version: str
     description: str
@@ -63,6 +71,7 @@ def search(
         src = hit["_source"]
         packages.append(
             Package(
+                index=hit.get("_index", ""),
                 name=src.get("package_attr_name", ""),
                 version=src.get("package_pversion", ""),
                 description=src.get("package_description") or "",

@@ -80,6 +80,7 @@ class KeywordQueryEventListener(EventListener):
         prefs = extension.preferences
         channel = prefs["channel"]
         max_results = int(prefs["max_results"])
+        # TODO: Add a separate search function to match by program name only
         packages = nixpkgs.search(
             query,
             channel,
