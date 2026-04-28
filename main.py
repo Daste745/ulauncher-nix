@@ -14,6 +14,7 @@ from ulauncher.api.shared.event import ItemEnterEvent, KeywordQueryEvent
 from ulauncher.api.shared.item.ExtensionResultItem import ExtensionResultItem
 
 import nixpkgs
+from util import deduplicate
 
 
 class Preferences(TypedDict):
@@ -59,7 +60,18 @@ class KeywordQueryEventListener(EventListener):
         prefs = extension.preferences
         channel = prefs["channel"]
         max_results = int(prefs["max_results"])
-        packages = nixpkgs.search(query, channel=channel, max_results=max_results)
+        packages = nixpkgs.search(
+            query,
+            channel=channel,
+            # Fetch extra results since we query multiple indexes
+            max_results=max_results * 3,
+        )
+        deduplicated_packages = deduplicate(
+            # TODO: Sort by index and/or version before deduplication to get latest versions
+            packages,
+            key=lambda pkg: pkg.name,
+        )
+        # TODO: After deduplication, sort by `_score` from the original results
         items = [
             ExtensionResultItem(
                 icon="images/icon.png",
@@ -68,9 +80,9 @@ class KeywordQueryEventListener(EventListener):
                 on_enter=OpenUrlAction(nixpkgs.package_url(pkg.name, query, channel)),
                 on_alt_enter=CopyToClipboardAction(nixpkgs.package_attribute(pkg.name)),
             )
-            for pkg in packages
+            for pkg in deduplicated_packages
         ]
-        return RenderResultListAction(items)
+        return RenderResultListAction(items[:max_results])
 
     def _handle_run(
         self,
@@ -84,11 +96,15 @@ class KeywordQueryEventListener(EventListener):
         packages = nixpkgs.search(
             query,
             channel,
-            # Fetch extra results since we filter for packages with executables
-            max_results=max_results * 3,
+            # Fetch extra results since we query multiple indexes
+            # and filter for packages with executables
+            max_results=max_results * 3 * 3,
         )
+        # TODO: Sort by index and/or version before deduplication to get latest versions
+        deduplicated_packages = deduplicate(packages, key=lambda pkg: pkg.name)
+        # TODO: After deduplication, sort by `_score` from the original results
         items: list[ExtensionResultItem] = []
-        for pkg in packages:
+        for pkg in deduplicated_packages:
             if len(pkg.programs) == 0:
                 continue
             for program in pkg.programs:
